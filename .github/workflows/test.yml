@@ -3,6 +3,8 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
+permissions:
+  content: read
 jobs:
   test:
     runs-on: ubuntu-latest
