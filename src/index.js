@@ -42,9 +42,9 @@ async function run() {
                 - ${diffData.additions} additions \n
                 - ${diffData.deletions} deletions
             `
-    })
+    });
 
-    const lables = []
+    const lables = [];
     for (const file of changeFiles) {
       const fileExtension = file.filename.split('.').pop()
       let label = ''
@@ -64,7 +64,7 @@ async function run() {
           break
       }
       lables.push(label)
-    }
+    };
 
     // Remove duplicate labels, if any
     const uniqueLabels = [...new Set(lables)]
@@ -74,10 +74,10 @@ async function run() {
       owner,
       issue_number: pr_number,
       labels: uniqueLabels
-    })
+    });
   } catch (error) {
     core.setFailed(error.message)
   }
-}
+};
 
-run()
+run();
