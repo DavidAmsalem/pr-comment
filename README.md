@@ -30,3 +30,8 @@ To use this action in your workflow, you can add it like this:
       token: ${{ secrets.GITHUB_TOKEN }}
 ```
 Best of Lucks!
+
+In case of the github action workflow fail becuse of permissions related error from integration than it's worth to check the link bellow and set permissions to read/write
+
+- make sure to replace <Owner> and <Repo> with the actual values 
+https://github.com/<Owner>/<Repo>/settings/actions#Workflow&permissions
