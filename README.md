@@ -6,7 +6,8 @@
 
 ## Description
 
-This GitHub Action adds the changes made in a pull request as a comment to the PR.
+This GitHub Action adds the changes made in a pull request as a comment to the
+PR.
 
 ## Inputs
 
@@ -27,3 +28,4 @@ To use this action in your workflow, you can add it like this:
       repo: ${{ github.event.repository.name }}
       pr_number: ${{ github.event.number }}
       token: ${{ secrets.GITHUB_TOKEN }}
+```
