@@ -29,4 +29,4 @@ To use this action in your workflow, you can add it like this:
       pr_number: ${{ github.event.number }}
       token: ${{ secrets.GITHUB_TOKEN }}
 ```
-Best of Lucks to All! 
+Best of Lucks! 
