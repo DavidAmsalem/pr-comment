@@ -31077,9 +31077,6 @@ module.exports = parseParams
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/**
- * The entrypoint for the action.
- */
 const core = __nccwpck_require__(2186)
 const github = __nccwpck_require__(5438)
 
@@ -31092,42 +31089,41 @@ async function run() {
 
     const octokit = new github.getOctokit(token)
 
-    const { data: changeFiles } = await octokit.rest.pulls.listFiles({
+    const { data: changedFiles } = await octokit.rest.pulls.listFiles({
       owner,
       repo,
       pull_number: pr_number
     })
 
     let diffData = {
-      additions: 0,
+      addition: 0,
       deletions: 0,
       changes: 0
     }
 
-    diffData = changeFiles.reduce((acc, file) => {
+    diffData = changedFiles.reduce((acc, file) => {
       acc.additions += file.additions
       acc.deletions += file.deletions
       acc.changes += file.changes
       return acc
     }, diffData)
 
-    // await octokit.rest.issues.createComment({
-    //   owner,
-    //   repo,
-    //   issue_number: pr_number,
-    //   body: `
-    //             Pull request #${pr_number} has been updated with: \n
-    //             - ${diffData.changes} changes \n
-    //             - ${diffData.additions} additions \n
-    //             - ${diffData.deletions} deletions
-    //         `
-    // })
+    await octokit.rest.issues.createComment({
+      owner,
+      repo,
+      issue_number: pr_number,
+      body: `
+        Pull request #${pr_number} has be updated with: \n
+        - ${diffData.changes} changes \n
+        - ${diffData.additions} additions \n
+        - ${diffData.deletions} deletions
+      `
+    })
 
-    const lables = []
-    for (const file of changeFiles) {
-      const fileExtension = file.filename.split('.').pop()
+    for (const file of changedFiles) {
+      const fileExtention = file.filename.split('.').pop()
       let label = ''
-      switch (fileExtension) {
+      switch (fileExtention) {
         case 'md':
           label = 'markdown'
           break
@@ -31135,25 +31131,21 @@ async function run() {
           label = 'javascript'
           break
         case 'yml':
+          label = 'yaml'
+          break
         case 'yaml':
           label = 'yaml'
           break
         default:
           label = 'noextension'
-          break
       }
-      lables.push(label)
+      await octokit.rest.issues.addLabels({
+        owner,
+        repo,
+        issue_number: pr_number,
+        labels: [label]
+      })
     }
-
-    // Remove duplicate labels, if any
-    const uniqueLabels = [...new Set(lables)]
-
-    // Make a single API call to add all labels to the issue
-    await octokit.rest.issues.addLabels({
-      owner,
-      issue_number: pr_number,
-      labels: uniqueLabels
-    })
   } catch (error) {
     core.setFailed(error.message)
   }

@@ -1,33 +1,33 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+const core = require('@actions/core')
+const github = require('@actions/github')
 
 async function run() {
   try {
-    const owner = core.getInput('owner', { required: true });
-    const repo = core.getInput('repo', { required: true });
-    const pr_number = core.getInput('pr_number', { required: true });
-    const token = core.getInput('token', { required: true });
+    const owner = core.getInput('owner', { required: true })
+    const repo = core.getInput('repo', { required: true })
+    const pr_number = core.getInput('pr_number', { required: true })
+    const token = core.getInput('token', { required: true })
 
-    const octokit = new github.getOctokit(token);
+    const octokit = new github.getOctokit(token)
 
     const { data: changedFiles } = await octokit.rest.pulls.listFiles({
       owner,
       repo,
-      pull_number: pr_number,
-    });
+      pull_number: pr_number
+    })
 
     let diffData = {
       addition: 0,
       deletions: 0,
       changes: 0
-    };
+    }
 
     diffData = changedFiles.reduce((acc, file) => {
-      acc.additions += file.additions;
-      acc.deletions += file.deletions;
-      acc.changes += file.changes;
-      return acc;
-    }, diffData);
+      acc.additions += file.additions
+      acc.deletions += file.deletions
+      acc.changes += file.changes
+      return acc
+    }, diffData)
 
     await octokit.rest.issues.createComment({
       owner,
@@ -39,37 +39,37 @@ async function run() {
         - ${diffData.additions} additions \n
         - ${diffData.deletions} deletions
       `
-    });
+    })
 
     for (const file of changedFiles) {
-      const fileExtention = file.filename.split('.').pop();
-      let label = '';
-      switch(fileExtention) {
+      const fileExtention = file.filename.split('.').pop()
+      let label = ''
+      switch (fileExtention) {
         case 'md':
-          label = 'markdown';
-          break;
+          label = 'markdown'
+          break
         case 'js':
-          label = 'javascript';
-          break;
+          label = 'javascript'
+          break
         case 'yml':
-          label = 'yaml';
-          break;
+          label = 'yaml'
+          break
         case 'yaml':
-          label = 'yaml';
-          break;
+          label = 'yaml'
+          break
         default:
-          label = 'noextension';
+          label = 'noextension'
       }
       await octokit.rest.issues.addLabels({
         owner,
         repo,
         issue_number: pr_number,
         labels: [label]
-      });
+      })
     }
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(error.message)
   }
 }
 
-run();
+run()
