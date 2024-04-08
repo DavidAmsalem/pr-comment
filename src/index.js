@@ -32,17 +32,17 @@ async function run() {
       return acc
     }, diffData)
 
-    await octokit.rest.issues.createComment({
-      owner,
-      repo,
-      issue_number: pr_number,
-      body: `
-                Pull request #${pr_number} has been updated with: \n
-                - ${diffData.changes} changes \n
-                - ${diffData.additions} additions \n
-                - ${diffData.deletions} deletions
-            `
-    })
+    // await octokit.rest.issues.createComment({
+    //   owner,
+    //   repo,
+    //   issue_number: pr_number,
+    //   body: `
+    //             Pull request #${pr_number} has been updated with: \n
+    //             - ${diffData.changes} changes \n
+    //             - ${diffData.additions} additions \n
+    //             - ${diffData.deletions} deletions
+    //         `
+    // })
 
     const lables = []
     for (const file of changeFiles) {
