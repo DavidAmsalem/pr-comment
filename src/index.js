@@ -1,5 +1,6 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
+const { Octokit } = require('@octokit/rest')
 
 async function run() {
   try {
@@ -8,7 +9,7 @@ async function run() {
     const pr_number = core.getInput('pr_number', { required: true })
     const token = core.getInput('token', { required: true })
 
-    const octokit = new github.getOctokit(token)
+    const octokit = new Octokit({ auth: token })
 
     const { data: changedFiles } = await octokit.rest.pulls.listFiles({
       owner,
