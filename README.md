@@ -25,7 +25,7 @@ To use this action in your workflow, you can add it like this:
     
 If the GitHub Action workflow fails due to permissions-related errors from the integration, make sure to check the Workflow & Permissions settings and set the appropriate permissions to read/write.
 
-Best of luck!
-
 - make sure to replace 'Owner' and 'Repo' with the actual values 
 github.com/Owner/Repo/settings/actions#Workflow&permissions
+
+Best of luck!
